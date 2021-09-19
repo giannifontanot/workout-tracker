@@ -1,39 +1,59 @@
+/**
+ * Dynamic routes that reads data from MongoDB
+ * @type {Router}
+ */
 const router = require('express').Router();
 const db = require('../../models');
 const mongoose = require("mongoose");
 
-
+// MongoDB connection
 const conn = mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {useNewUrlParser: true})
 
-//getLastWorkout
+// getLastWorkout
+// gets data according to the ID read from browser URL
 router.get('/', async (req, res) => {
     try {
-        console.log("---> getLastWorkout");
+        //Aggregate totalDuration
+        const resAggregate = await db.Workout.aggregate([{
+            $addFields: {
+                totalDuration: {
+                    $sum: "$exercises.duration"
+                }
+            }
+        }]);
 
-        const dbWorkoutDATA = await db.Workout.find();
-        res.json(dbWorkoutDATA);
+        res.json(resAggregate);
 
     } catch (e) {
         res.json(e);
     }
 })
-// getWorkoutsInRange
 
-router.get('/range', (req, res, next) => {
-    console.log("---> getWorkoutsInRange ");
+// getWorkoutsInRange
+// Reads workouts and AGGREGATES the Total Duration of the exercises
+router.get('/range', async (req, res, next) => {
+
+    // Aggregates the Total Duration
+    // Sorts by Date
+    // Sends the last 7 documents
+    const resAggregate = await db.Workout.aggregate([{
+        $addFields: {
+            totalDuration: {
+                $sum: "$exercises.duration"
+            }
+        }
+    }]).sort({day: 1}).limit(7);
+
+    res.json(resAggregate);
 })
 
 
 // addExercise
+// Adds one exercise to a Workout identified by the ID in the URL
 router.put('/:id', async (req, res, next) => {
     const id = req.params.id;
     const body = req.body;
     let dbWorkoutDATA;
-//
-// const exercises = [...dbWorkout.exercises, body]
-//     console.log(exercises)
-//     dbWorkout.exercises = exercises;
-// await dbWorkout.save();
 
     const {duration} = body;
     if (duration === 0) {
@@ -47,22 +67,18 @@ router.put('/:id', async (req, res, next) => {
         );
     }
 
-
-    console.log(dbWorkoutDATA.exercises)
-    //console.log(dbWorkoutDATA);
     res.json(dbWorkoutDATA);
 })
-//createWorkout
+// createWorkout
+// Creates an empty workout to be filled with exercises.
 router.post('/', async (req, res, next) => {
     try {
-        console.log("creat empty eWorkout")
         const dbWorkoutDATA = await db.Workout.create({day: new Date()})
         res.json(dbWorkoutDATA);
 
     } catch (e) {
         res.json(e);
     }
-
 })
 
 

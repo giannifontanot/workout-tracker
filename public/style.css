@@ -12,7 +12,6 @@ html,
 body,
 .wrapper {
   height: 100%;
-  background-color: lightgray;
 }
 
 body {
@@ -107,7 +106,6 @@ input {
 
 .wrapper {
   /*background-color: #f2f8ff;*/
-  background-color: lightgray;
   padding-bottom: 100px;
 }
 
@@ -115,7 +113,6 @@ input {
 .m-auto {
   margin: 0 auto;
   width: 500px;
-  background-color: lightgray;
 }
 
 form .workout-type,

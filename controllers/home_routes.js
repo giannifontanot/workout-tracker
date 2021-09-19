@@ -1,3 +1,7 @@
+/**
+ * Home routes to serve static files
+ * @type {Router}
+ */
 const router = require('express').Router();
 const path = require('path');
 const root = require('app-root-path');

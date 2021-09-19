@@ -19,16 +19,10 @@ let shouldNavigateAway = false;
 
 async function initExercise() {
 
-    console.log("---> initExercise :");
-    console.log("location.search.split: " + location.search.split("=")[1])
-
     let workout;
 
     if (location.search.split("=")[1] === undefined) {
-        console.log("---> undefined :");
         workout = await API.createWorkout()
-        console.log(workout)
-        console.log("---> return from POST ");
     }
     if (workout) {
         location.search = "?id=" + workout._id;
@@ -118,32 +112,37 @@ async function handleFormSubmit(event) {
         workoutData.duration = Number(resistanceDurationInput.value.trim());
     }
 
+    ////////////////////////////////////////////////////////////
+    //                                                        //
+    // When click COMPLETE button, toasts the correct message //
+    //                                                        //
+    ////////////////////////////////////////////////////////////
+
     const classList = '' + event.target.classList + '';
     let save;
     let message;
 
+    /* Click Add Exercise*/
     if (classList.search("complete") < 0) {
-        message = "Workout ADDED successfully!";
+        message = "Exercise ADDED successfully!";
         save = true;
-        console.log("case 1")
     }
 
+    /* Click COMPLETE with NO DATA in exercise*/
     if (classList.search("complete") >= 0 && workoutData.duration <= 0) {
         message = "Workout COMPLETED successfully!";
         save = false;
-        console.log("case 2")
     }
 
+    /* Click COMPLETE WITH DATA in exercise*/
     if (classList.search("complete") >= 0 && workoutData.duration > 0) {
-        message = "Workout ADDED AND COMPLETED successfully!";
+        message = "Exercise ADDED and Workout COMPLETED successfully!";
         save = true;
-        console.log("case 3")
     }
 
-    console.log("---> message :" + (message));
+    /* No exercise to save*/
     if (save) {
         const dbWorkoutDATA = await API.addExercise(workoutData);
-        console.log("---> dbWorkoutDATA :" + JSON.stringify(dbWorkoutDATA));
     }
     toast.innerText = message;
     clearInputs();
