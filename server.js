@@ -1,10 +1,17 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const root = require('app-root-path');
 const PORT = process.env.PORT || 3000;
 const app = express();
 const routes = require('./controllers')
 
+
+mongoose.connect('mongodb://localhost/workout', {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+});
 
 
 // STATIC FILE LOCATION

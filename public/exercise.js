@@ -18,139 +18,170 @@ let workoutType = null;
 let shouldNavigateAway = false;
 
 async function initExercise() {
-  let workout;
 
-  if (location.search.split("=")[1] === undefined) {
-    workout = await API.createWorkout()
-    console.log(workout)
-  }
-  if (workout) {
-    location.search = "?id=" + workout._id;
-  }
+    console.log("---> initExercise :");
+    console.log("location.search.split: " + location.search.split("=")[1])
 
+    let workout;
+
+    if (location.search.split("=")[1] === undefined) {
+        console.log("---> undefined :");
+        workout = await API.createWorkout()
+        console.log(workout)
+        console.log("---> return from POST ");
+    }
+    if (workout) {
+        location.search = "?id=" + workout._id;
+    }
 }
 
 initExercise();
 
 function handleWorkoutTypeChange(event) {
-  workoutType = event.target.value;
+    workoutType = event.target.value;
 
-  if (workoutType === "cardio") {
-    cardioForm.classList.remove("d-none");
-    resistanceForm.classList.add("d-none");
-  } else if (workoutType === "resistance") {
-    resistanceForm.classList.remove("d-none");
-    cardioForm.classList.add("d-none");
-  } else {
-    cardioForm.classList.add("d-none");
-    resistanceForm.classList.add("d-none");
-  }
+    if (workoutType === "cardio") {
+        cardioForm.classList.remove("d-none");
+        resistanceForm.classList.add("d-none");
+    } else if (workoutType === "resistance") {
+        resistanceForm.classList.remove("d-none");
+        cardioForm.classList.add("d-none");
+    } else {
+        cardioForm.classList.add("d-none");
+        resistanceForm.classList.add("d-none");
+    }
 
-  validateInputs();
+    validateInputs();
 }
 
 function validateInputs() {
-  let isValid = true;
+    let isValid = true;
 
-  if (workoutType === "resistance") {
-    if (nameInput.value.trim() === "") {
-      isValid = false;
+    if (workoutType === "resistance") {
+        if (nameInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (weightInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (setsInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (repsInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (resistanceDurationInput.value.trim() === "") {
+            isValid = false;
+        }
+    } else if (workoutType === "cardio") {
+        if (cardioNameInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (durationInput.value.trim() === "") {
+            isValid = false;
+        }
+
+        if (distanceInput.value.trim() === "") {
+            isValid = false;
+        }
     }
 
-    if (weightInput.value.trim() === "") {
-      isValid = false;
+    if (isValid) {
+        completeButton.removeAttribute("disabled");
+        addButton.removeAttribute("disabled");
+    } else {
+        completeButton.setAttribute("disabled", true);
+        addButton.setAttribute("disabled", true);
     }
-
-    if (setsInput.value.trim() === "") {
-      isValid = false;
-    }
-
-    if (repsInput.value.trim() === "") {
-      isValid = false;
-    }
-
-    if (resistanceDurationInput.value.trim() === "") {
-      isValid = false;
-    }
-  } else if (workoutType === "cardio") {
-    if (cardioNameInput.value.trim() === "") {
-      isValid = false;
-    }
-
-    if (durationInput.value.trim() === "") {
-      isValid = false;
-    }
-
-    if (distanceInput.value.trim() === "") {
-      isValid = false;
-    }
-  }
-
-  if (isValid) {
-    completeButton.removeAttribute("disabled");
-    addButton.removeAttribute("disabled");
-  } else {
-    completeButton.setAttribute("disabled", true);
-    addButton.setAttribute("disabled", true);
-  }
 }
 
 async function handleFormSubmit(event) {
-  event.preventDefault();
+    event.preventDefault();
+    let workoutData = {};
 
-  let workoutData = {};
+    if (workoutType === "cardio") {
+        workoutData.type = "cardio";
+        workoutData.name = cardioNameInput.value.trim();
+        workoutData.distance = Number(distanceInput.value.trim());
+        workoutData.duration = Number(durationInput.value.trim());
+    } else if (workoutType === "resistance") {
+        workoutData.type = "resistance";
+        workoutData.name = nameInput.value.trim();
+        workoutData.weight = Number(weightInput.value.trim());
+        workoutData.sets = Number(setsInput.value.trim());
+        workoutData.reps = Number(repsInput.value.trim());
+        workoutData.duration = Number(resistanceDurationInput.value.trim());
+    }
 
-  if (workoutType === "cardio") {
-    workoutData.type = "cardio";
-    workoutData.name = cardioNameInput.value.trim();
-    workoutData.distance = Number(distanceInput.value.trim());
-    workoutData.duration = Number(durationInput.value.trim());
-   } else if (workoutType === "resistance") {
-    workoutData.type = "resistance";
-    workoutData.name = nameInput.value.trim();
-    workoutData.weight = Number(weightInput.value.trim());
-    workoutData.sets = Number(setsInput.value.trim());
-    workoutData.reps = Number(repsInput.value.trim());
-    workoutData.duration = Number(resistanceDurationInput.value.trim());
-  }
+    const classList = '' + event.target.classList + '';
+    let save;
+    let message;
 
-  await API.addExercise(workoutData);
-  clearInputs();
-  toast.classList.add("success");
+    if (classList.search("complete") < 0) {
+        message = "Workout ADDED successfully!";
+        save = true;
+        console.log("case 1")
+    }
+
+    if (classList.search("complete") >= 0 && workoutData.duration <= 0) {
+        message = "Workout COMPLETED successfully!";
+        save = false;
+        console.log("case 2")
+    }
+
+    if (classList.search("complete") >= 0 && workoutData.duration > 0) {
+        message = "Workout ADDED AND COMPLETED successfully!";
+        save = true;
+        console.log("case 3")
+    }
+
+    console.log("---> message :" + (message));
+    if (save) {
+        const dbWorkoutDATA = await API.addExercise(workoutData);
+        console.log("---> dbWorkoutDATA :" + JSON.stringify(dbWorkoutDATA));
+    }
+    toast.innerText = message;
+    clearInputs();
+    toast.classList.add("success");
 }
 
 function handleToastAnimationEnd() {
-  toast.removeAttribute("class");
-  if (shouldNavigateAway) {
-    location.href = "/";
-  }
+    toast.removeAttribute("class");
+    if (shouldNavigateAway) {
+        location.href = "/";
+    }
 }
 
 function clearInputs() {
-  cardioNameInput.value = "";
-  nameInput.value = "";
-  setsInput.value = "";
-  distanceInput.value = "";
-  durationInput.value = "";
-  repsInput.value = "";
-  resistanceDurationInput.value = "";
-  weightInput.value = "";
+    cardioNameInput.value = "";
+    nameInput.value = "";
+    setsInput.value = "";
+    distanceInput.value = "";
+    durationInput.value = "";
+    repsInput.value = "";
+    resistanceDurationInput.value = "";
+    weightInput.value = "";
 }
 
 if (workoutTypeSelect) {
-  workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
+    workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
 }
 if (completeButton) {
-  completeButton.addEventListener("click", function (event) {
-    shouldNavigateAway = true;
-    handleFormSubmit(event);
-  });
+    completeButton.addEventListener("click", function (event) {
+        shouldNavigateAway = true;
+        handleFormSubmit(event);
+    });
 }
 if (addButton) {
-  addButton.addEventListener("click", handleFormSubmit);
+    addButton.addEventListener("click", handleFormSubmit);
 }
 toast.addEventListener("animationend", handleToastAnimationEnd);
 
 document
-  .querySelectorAll("input")
-  .forEach(element => element.addEventListener("input", validateInputs));
+    .querySelectorAll("input")
+    .forEach(element => element.addEventListener("input", validateInputs));

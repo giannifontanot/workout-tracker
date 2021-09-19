@@ -8,7 +8,7 @@ const conn = mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/wo
 //getLastWorkout
 router.get('/', async (req, res) => {
     try {
-        console.log("---> get");
+        console.log("---> getLastWorkout");
 
         const dbWorkoutDATA = await db.Workout.find();
         res.json(dbWorkoutDATA);
@@ -17,26 +17,52 @@ router.get('/', async (req, res) => {
         res.json(e);
     }
 })
-//getWorkoutsInRange
+// getWorkoutsInRange
+
 router.get('/range', (req, res, next) => {
+    console.log("---> getWorkoutsInRange ");
 })
 
 
-//addExercise
-router.put('/:id', (req, res, next) => {
+// addExercise
+router.put('/:id', async (req, res, next) => {
     const id = req.params.id;
-    console.log("---> id :" + (id));
-    const {body} = req.body;
-    const  dbWorkoutDATA  = db.Workout.findOneAndUpdate(
-        {id: id},
-        {$push: {exercise: body}},
-        {new: false},
-    );
+    const body = req.body;
+    let dbWorkoutDATA;
+//
+// const exercises = [...dbWorkout.exercises, body]
+//     console.log(exercises)
+//     dbWorkout.exercises = exercises;
+// await dbWorkout.save();
 
-         console.log("---> dbWorkoutDATA :" +(dbWorkoutDATA) );
+    const {duration} = body;
+    if (duration === 0) {
+        dbWorkoutDATA = await db.Workout.findById(id);
+
+    } else {
+        dbWorkoutDATA = await db.Workout.findByIdAndUpdate(
+            id,
+            {$push: {exercises: body}},
+            {new: true},
+        );
+    }
+
+
+    console.log(dbWorkoutDATA.exercises)
+    //console.log(dbWorkoutDATA);
+    res.json(dbWorkoutDATA);
 })
 //createWorkout
-router.post('/', (req, res, next) => {
+router.post('/', async (req, res, next) => {
+    try {
+        console.log("creat empty eWorkout")
+        const dbWorkoutDATA = await db.Workout.create({day: new Date()})
+        res.json(dbWorkoutDATA);
+
+    } catch (e) {
+        res.json(e);
+    }
+
 })
 
 
