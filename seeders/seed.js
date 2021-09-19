@@ -1,7 +1,12 @@
 const mongoose = require('mongoose');
 const db = require('../models');
 
-mongoose.connect('mongodb://localhost/workout', {
+let uri;
+
+
+//uri = 'mongodb+srv://root:uAiV4948qikbmHZ@cluster0.antyn.mongodb.net/workout?retryWrites=true&w=majority';
+
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
   useNewUrlParser: true,
   useFindAndModify: false,
   useUnifiedTopology: true,
