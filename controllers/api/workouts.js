@@ -5,6 +5,7 @@
 const router = require('express').Router();
 const db = require('../../models');
 const mongoose = require("mongoose");
+const connection = require("../../connection")
 
 // MongoDB connection
 const conn = mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {useNewUrlParser: true})
@@ -42,7 +43,7 @@ router.get('/range', async (req, res, next) => {
                 $sum: "$exercises.duration"
             }
         }
-    }]).sort({day: 1}).limit(7);
+    }]).sort({day: -1}).limit(7);
 
     res.json(resAggregate);
 })

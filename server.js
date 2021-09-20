@@ -7,12 +7,6 @@ const app = express();
 const routes = require('./controllers')
 
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-});
-
 
 // STATIC FILE LOCATION
 app.use('/',express.static('public'));
