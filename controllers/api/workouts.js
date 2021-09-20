@@ -36,7 +36,11 @@ router.get('/range', async (req, res, next) => {
         $addFields: {
             totalDuration: {
                 $sum: "$exercises.duration"
-            }
+            },
+            totalDistance: {
+                $sum: "$exercises.distance"
+            },
+
         }
     }]).sort({day: -1}).limit(7);
 

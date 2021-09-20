@@ -17,10 +17,12 @@ function calculateTotalWeight(data) {
 
 function populateChart(data) {
   const durations = data.map(({ totalDuration }) => totalDuration);
+  const distance = data.map(({ totalDistance }) => totalDistance);
   const pounds = calculateTotalWeight(data);
 
   const line = document.querySelector('#canvas').getContext('2d');
   const bar = document.querySelector('#canvas2').getContext('2d');
+  const line2 = document.querySelector('#canvas3').getContext('2d');
 
   const labels = data.map(({ day }) => {
     const date = new Date(day);
@@ -60,6 +62,39 @@ function populateChart(data) {
       },
     },
   });
+
+  //////////////////////////////////////////////////////////////////////////////////////
+  //                                                                                  //
+  let lineChart2 = new Chart(line2, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [
+        {
+          label: 'Running Distance In Miles',
+          backgroundColor: 'green',
+          borderColor: 'green',
+          data: distance,
+          fill: false,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      title: {
+        display: true,
+        text: 'Time Spent Running Out (Last 7 days)',
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+        },
+      },
+    },
+  });
+
+  //                                                                                  //
+  //////////////////////////////////////////////////////////////////////////////////////
 
   let barChart = new Chart(bar, {
     type: 'bar',
