@@ -2,7 +2,11 @@
 ![Status Stable](https://img.shields.io/badge/Status-Stable-blue)
 [![MIT License](https://img.shields.io/badge/License-MIT%20License-brightgreen)](https://github.com/tterb/atomic-design-ui/blob/master/LICENSEs)
 # Workout Tracker
-When a person wants to develop the habit of exercising, it will be easier when there is a way to track progress. This application is designed to track your exercise and record the days and types of exercise performed.
+When a person wants to develop the habit of exercising, it will be easier when there is a way to track progress. 
+This application is designed to track your exercise and record the days and types of exercise performed. 
+My task as a developer was to code the backend using MongoDB and upload it to Heroku. 
+The application frontend was provided as startup code.
+
 ## Table of Contents
 - Workout Tracker
   * [Installation](#installation)
@@ -17,16 +21,18 @@ When a person wants to develop the habit of exercising, it will be easier when t
     + [Support](#support)
     + [Authors](#authors)
 ## Installation
-- If you want to run the application you will only need a web browser. 
-- In case you want to improve the development then you will need to install:
+- To run the application you will only need a web browser. 
+- In case you want to improve the code, then you will need to install:
 	+ NodeJS 
 	+ ExpressJS and 
-	+ MongoDB.
+	+ MongoDB
+    
 ## Usage
 You can use this app in the gym or during your running laps, just attach your phone firmly on your arm!
 
 ![workout-tracker.gif](workout-tracker.gif)
 ## Credits
+To develop the backend of this app I used many resources. The most important are these:
  - [Mongoose $addFieldfs](https://docs.mongodb.com/manual/reference/operator/aggregation/addFields/#mongodb-pipeline-pipe.-addFields)
  - [Tabnine - Aggregate Function](https://www.tabnine.com/code/javascript/functions/mongoose/Model/aggregate)
  - [How to deploy MongoDB in Heroku](https://www.mongodb.com/developer/how-to/use-atlas-on-heroku/)
