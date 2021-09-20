@@ -1,13 +1,15 @@
-const connURI = process.env.MONGODB_URI || 'mongodb://localhost/workout';
 const root = require('app-root-path');
 const path = require('path');
 require('dotenv').config({path: root + path.sep + ".env"});
 const db = require('../models');
 const mongoose = require('mongoose');
 
-// THIS LINE ////////////////////////////////////////////
-const connection = require('../config/connection');
-/////////////////////////////////////////////////////////
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
+    useNewUrlParser: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true,
+});
+
 
 const workoutSeed = [
     {

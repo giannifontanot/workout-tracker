@@ -4,11 +4,6 @@
  */
 const router = require('express').Router();
 const db = require('../../models');
-const mongoose = require("mongoose");
-const connection = require("../../connection")
-
-// MongoDB connection
-const conn = mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {useNewUrlParser: true})
 
 // getLastWorkout
 // gets data according to the ID read from browser URL

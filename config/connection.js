@@ -3,7 +3,6 @@ let mongoose = require('mongoose')
 const root = require('app-root-path');
 const path = require('path');
 require('dotenv').config({path: root + path.sep + ".env"});
-let connection;
 
 
 
