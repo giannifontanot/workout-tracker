@@ -6,7 +6,8 @@ const app = express();
 const routes = require('./controllers')
 const path = require('path');
 require('dotenv').config({path: root + path.sep + ".env"});
-console.log("process.env.MONGODB_URI: " + process.env.MONGODB_URI)
+
+//Connect to MongoDB Atlas
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost/workout', {
     useNewUrlParser: true,
     useFindAndModify: false,

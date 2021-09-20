@@ -51,8 +51,8 @@ In case you need them, here are some guidelines: [Contributor Covenant](https://
 # 🔗 Links
 ### GitHub Repository
 [https://github.com/giannifontanot/workout-tracker/](https://github.com/giannifontanot/workout-tracker/)
-### Live Link
-[https://giannifontanot.github.io/AAA](https://giannifontanot.github.io/AAA)
+### Live Link in Heroku
+[https://gianni-workout-tracker.herokuapp.com/](https://gianni-workout-tracker.herokuapp.com/)
 ### Support
 If you need help with this project, please write to: [giannifontanot@gmail.com](https://mailto:giannifontanot@gmail.com)
 ### Authors
