@@ -40,7 +40,8 @@ router.get('/range', async (req, res, next) => {
         }
     }]).sort({day: -1}).limit(7);
 
-    res.json(resAggregate);
+    // Presents the information correctly
+    res.json(resAggregate.reverse());
 })
 
 
