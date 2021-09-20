@@ -10,7 +10,7 @@ const home_routes = require('./home_routes');
 // Static routes
 routes.use('/', home_routes);
 
-// Dynamic routes
+// Dynamic routess
 routes.use('/api/workouts', workouts_routes);
 
 module.exports =  routes;
